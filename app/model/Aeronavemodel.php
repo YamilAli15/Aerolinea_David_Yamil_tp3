@@ -15,17 +15,15 @@ class Administrador_tabla_de_aviones extends Model
         $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
-    function Filtrar_por_el_precio_mayor_elegido($pecio)
-    {
-        //abrimos la conexion;
-        $db = $this->createConexion();
+    public function Filtrarporelpreciomayorelegido($precio) {
 
-        //Enviar la consulta
-        $sentencia = $db->prepare("SELECT * FROM aerolineas_argentinas WHERE pecio > = ?");
-        $sentencia->execute([$pecio]);
+        $db = $this->createConexion();
+        $sentencia = $db->prepare("SELECT * FROM aerolineas_argentinas WHERE precio > ?");
+        $sentencia->execute([$precio]);
         $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
+ 
     
     function insert_Aeronave($Aeronave, $Precio, $Fecha)
     {
@@ -56,6 +54,28 @@ class Administrador_tabla_de_aviones extends Model
         $sentencia = $db->prepare("SELECT * FROM aerolineas_argentinas WHERE id = ?");
         $sentencia->execute([$id]);
         $vuelos = $sentencia->fetch(PDO::FETCH_OBJ);
+        return $vuelos;
+    }
+    function Lista_de_precio_de_manera_ascendente()
+    { // tabla general de todos los vuelos 
+
+        $db = $this->createConexion();
+
+
+        $sentencia = $db->prepare("SELECT * FROM `aerolineas_argentinas` ORDER BY `aerolineas_argentinas`.`Precio` ASC");
+        $sentencia->execute();
+        $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $vuelos;
+    }
+    function Lista_de_precio_de_manera_Descendente()
+    { // tabla general de todos los vuelos 
+
+        $db = $this->createConexion();
+
+
+        $sentencia = $db->prepare("SELECT * FROM `aerolineas_argentinas` ORDER BY `aerolineas_argentinas`.`Precio` DESC");
+        $sentencia->execute();
+        $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
 }

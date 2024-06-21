@@ -62,9 +62,10 @@ class Controlador_vuelos
             return  $this->view->response("Se insertó correctamente con id: $lastId", 200);
             
     }
-   function Editar_tabla_de_vuelos(){
+   function Editar_tabla_de_vuelos($params=null){
+    $id = $params[':ID'];
     try{
-        $vuelos = $this->modelvuelos->tabla_de_vuelos();
+        $vuelos = $this->modelvuelos->tabla_de_vuelos($id);
         $Aeronave = $this->modelAeronave->datos_de_tabla_de_Aeronave();
         if($Aeronave && $vuelos){
             $responseA = [
