@@ -15,6 +15,18 @@ class Administrador_tabla_de_aviones extends Model
         $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
+    function Filtrar_por_el_precio_mayor_elegido($pecio)
+    {
+        //abrimos la conexion;
+        $db = $this->createConexion();
+
+        //Enviar la consulta
+        $sentencia = $db->prepare("SELECT * FROM aerolineas_argentinas WHERE pecio > = ?");
+        $sentencia->execute([$pecio]);
+        $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $vuelos;
+    }
+    
     function insert_Aeronave($Aeronave, $Precio, $Fecha)
     {
         //abrimos la conexion;

@@ -7,7 +7,7 @@ class TaskApiController {
     private $model;
     private $view;
 
-    private $data;
+    private $data;   
 
     public function __construct() {
         $this->model = new TaskModel();
@@ -75,17 +75,18 @@ class TaskApiController {
 
     }  
     
-    // public function addTarea() {
-    //     $tareaNueva = $this->getData();
+    public function addTarea() {
+        $tareaNueva = $this->getData();
 
-    //     $lastId = $this->model->save(
-    //             $tareaNueva->titulo, 
-    //             $tareaNueva->descripcion, 
-    //             $tareaNueva->prioridad);
+        $lastId = $this->model->save(
+                $tareaNueva->titulo, 
+                $tareaNueva->descripcion, 
+                $tareaNueva->prioridad);
 
-    //     $this->view->response("Se insertó correctamente con id: $lastId", 200);
+        $this->view->response("Se insertó correctamente con id: $lastId", 200);
 
-    // }
+    }
+}
 
     // public function borrarTarea($params = null) {
     //     $id = $params[':ID'];
@@ -99,16 +100,16 @@ class TaskApiController {
     //     }
     // }
 
-    // public function finalizaTarea($params = null) {
-    //     $id = $params[':ID'];
-    //     $tarea = $this->model->get($id);
-    //     if ($tarea) {
-    //         $titulo = $tarea->titulo;
-    //         $this->model->end($id);
+//     public function finalizaTarea($params = null) {
+//         $id = $params[':ID'];
+//         $tarea = $this->model->get($id);
+//         if ($tarea) {
+//             $titulo = $tarea->titulo;
+//             $this->model->end($id);
 
-    //         $this->view->response("Tarea $titulo, finalizada", 200);
-    //     } else {
-    //         $this->view->response("Tarea $id, no encontrada", 404);
-    //     }
-    // }    
-}
+//             $this->view->response("Tarea $titulo, finalizada", 200);
+//         } else {
+//             $this->view->response("Tarea $id, no encontrada", 404);
+//         }
+//     }    
+// }

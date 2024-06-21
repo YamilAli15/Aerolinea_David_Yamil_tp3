@@ -9,26 +9,22 @@ class login
 
     private $model;
     private $view;
+    private $data;
 
     public function __construct()
     {
         $this->model = new datos_de_usuarios();
-        $this->view = new AvionesView();
+
+        $this->view = new JSONView();
+
+        $this->data = file_get_contents("php://input");
     }
-    function Homepage()
-    {
-        $this->view->Homepage();
-    }
-    function login()
-    {
-        $this->view->login();
-    }
+   
 
     function logout()
     {
         session_start();
         session_destroy();
-        header("Location:" . BASE_URL . "login");
     }
 
     function Verify_login()
@@ -46,12 +42,12 @@ class login
                     $_SESSION['USERNAME'] = $users->name;
                     $_SESSION['ROLE'] = $users->Range;
 
-                    header("Location:" . BASE_URL . "home");
+                
                 } else {
-                    $this->view->login("Usuario incorrecto");
+                    // $this->view->login("Usuario incorrecto");
                 }
             } else {
-                $this->view->login("faltan datos obligatorios");
+                // $this->view->login("faltan datos obligatorios");
             }
         }
     }
