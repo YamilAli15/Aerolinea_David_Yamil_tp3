@@ -88,7 +88,7 @@ class Controlador_Aeronave
 
 
     public function Filtrar_por_el_precio_mayor_elegido($params = null) {
-        $precio = $params[':precio'] ?? null;
+        $precio = $params[':precio'];
         
         if (is_null($precio) || $precio === '') {
             return $this->view->response("El parámetro 'precio' es requerido", 400);
