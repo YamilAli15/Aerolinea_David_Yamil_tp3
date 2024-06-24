@@ -4,7 +4,7 @@ require_once "app/view/AvionesView.php";
 require_once "app/model/Usuarios.php";
 
 
-class login
+class Controlador_login
 {
 
     private $model;
