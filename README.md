@@ -1279,3 +1279,11 @@ class AuthHelper {
     }
 }
  ```
+
+## Notas Adicionales
+
+- Asegúrate de que tu servidor esté corriendo y que los archivos config.php y AuthHelper estén correctamente incluidos.
+
+- Verifica que la autenticación básica y la generación de token JWT funcionen según lo esperado en tu entorno de desarrollo.
+
+- Si encuentras problemas, revisa los logs del servidor para más detalles sobre posibles errores.
