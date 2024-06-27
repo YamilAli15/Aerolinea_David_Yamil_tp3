@@ -1,58 +1,69 @@
 <?php
+require_once 'app/controller/Controller.php';
+require_once 'app/model/AuthModel.php';
 
-require_once "app/view/AvionesView.php";
-require_once "app/model/Usuarios.php";
+class AuthApiController extends Controller{
 
+    private $model;  
 
-class Controlador_login
-{
-
-    private $model;
-    private $view;
-    private $data;
-
-    public function __construct()
-    {
-        $this->model = new datos_de_usuarios();
-
-        $this->view = new JSONView();
-
-        $this->data = file_get_contents("php://input");
+    function __construct() {
+        parent::__construct();
+        $this->model = new datos_de_usuarios(); 
     }
-   
-
-    function logout()
-    {
-        session_start();
-        session_destroy();
-    }
-
-    function verify_login($username, $password) {
-        // Validar datos de entrada
-        if (empty($username) || empty($password)) {
-            return $this->view->response("Nombre de usuario y contraseña son requeridos", 400);
-        }
     
-        try {
-            // Buscar el usuario en la base de datos
-            $user = $this->model->usuarios($username);
+
+    function login() {
+        //PASO 1 obtenemos la autorizacion y la guardamos en una variable
+        //PASO 2 al resultado del PASO 1 lo convertimos en arreglo explode(" ", $variable)
+        //PASO 3 la variable[1] de ese arreglo de decodificamos usando base64_decode($variable[1]) y lo guardamos en otra variable;
+        //PASO 4 aquí tenemos los datos del usuario
+
+        //te devuelve el valor del encabezado de autorización HTTP
+        $basic = $this->authHelper->getAuthHeaders(); // Darnos el header 'Authorization:' 'Basic: base64(usr:pass)'
+        if(empty($basic)) {
+            $this->view->response('No envió encabezados de autenticación.', 401);
+            die();
+        }
+        //devuelve el valor del encabezado en la siguinte estructura "basic {valor codificado}"
+        $basic = explode(" ", $basic);
+        
+        if($basic[0]!="Basic") {
+            $this->view->response('Autenticación incorrecta.', 401);
+            die();
+        }
+        
+        $userpass = base64_decode($basic[1]); //base64_decode($basic[1]): se utiliza para decodificar datos codificados en base64.
+        
+        //$userpass tiene los datos del usuario de la siguiente forma webadmin:admin
+        $userpass = explode(":", $userpass); // los separo con los "dos puntos"
+        
+        $email = $userpass[0];
+        $pass = $userpass[1];
+        $user = $this->model->usuarios($email);
+        
+        if($user && password_verify($pass, $user->password)){
+            $userdata = [ "email" => $user->email, "role" => $user->rol];
+            $token = $this->authHelper->createToken($userdata);
             
-            if ($user && password_verify($password, $user->Password)) {
-                // Iniciar sesión de forma segura
-                session_start();
-                $_SESSION['IS_LOGGED'] = true;
-                $_SESSION['USERNAME'] = $user->name;
-                $_SESSION['ROLE'] = $user->Range;
-    
-                // Retornar respuesta exitosa
-                return $this->view->response("Inicio de sesión exitoso", 200);
-            } else {
-                // Retornar respuesta de error en caso de credenciales incorrectas
-                return $this->view->response("Nombre de usuario o contraseña incorrectos", 401);
-            }
-        } catch (Exception $e) {
-            // Manejo de errores
-            return $this->view->response("Error al verificar el login: " . $e->getMessage(), 500);
+            $response = [
+                "status" => 200,
+                "data" => $userdata,
+                "token" => $token
+            ];               
+            $this->view->response($response, 200);
+        }else{
+            $response = [
+                "status" => 404,
+                "message" => "El usuario o contraseña son incorrectos."
+            ];
+            $this->view->response($response, 404);
         }
     }
+
+
+
+
+
+
+
 }

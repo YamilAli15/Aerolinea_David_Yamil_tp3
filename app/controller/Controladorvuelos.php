@@ -1,33 +1,29 @@
 <?php
-require_once('app/view/JSONView.php');
+require_once 'app/controller/Controller.php';
 require_once "app/model/vuelosmodel.php";
 require_once "app/model/Aeronavemodel.php";
 
-class Controlador_vuelos
+class Controlador_vuelos extends Controller
 {
 
     private $modelvuelos;
-    private $view;
     private $modelAeronave; 
-    private $data;
+ 
 
 
     public function __construct()
     {
+        parent::__construct();
         $this->modelvuelos = new Administrador_tabla_de_vuelos();
         $this->modelAeronave = new Administrador_tabla_de_aviones();
-        $this->view = new JSONView();
-        $this->data = file_get_contents("php://input");
 
     }
-    private function getData() {
-        return json_decode($this->data);
-    }
-
+   
 
     function mostrarTablaDeVuelos($params = null)
     {
-        // Validar y obtener el ID
+        $user = $this->authHelper->currentUser(); 
+        if($user){ // Validar y obtener el ID
         if (!isset($params[':ID'])) {
             return $this->view->response("Parámetros inválidos", 400);
         }
@@ -57,8 +53,11 @@ class Controlador_vuelos
             return $this->view->response("Error de servidor", 500);
         }
     }
+}
     function insert_vuelo()
     {
+        $user = $this->authHelper->currentUser(); 
+        if($user){
         // Obtener datos de la solicitud
         $tareaAeronave = $this->getData();
     
@@ -83,8 +82,10 @@ class Controlador_vuelos
         }
     }
 
-    
+} 
     function Editar_tabla_de_vuelos($params = null) {
+        $user = $this->authHelper->currentUser(); 
+        if($user){
         // Validar que el parámetro ID esté presente
         if (!isset($params[':ID'])) {
             return $this->view->response("Faltan parámetros requeridos", 400);
@@ -121,3 +122,5 @@ class Controlador_vuelos
         }
     }
 } 
+
+}

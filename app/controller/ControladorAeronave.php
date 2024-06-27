@@ -1,28 +1,26 @@
 <?php
 
 
-require_once('app/view/JSONView.php');
+require_once 'app/controller/Controller.php';
 require_once ("app/model/Aeronavemodel.php");
-class Controlador_Aeronave
+class Controlador_Aeronave extends Controller
 {
 
     private $model;
-    private $view;    
-    private $data;
+ 
+  
 
 
     public function __construct()
     {
-       
-        $this->view = new JSONView();
+        parent::__construct();
         $this->model = new Administrador_tabla_de_aviones(); 
-        $this->data = file_get_contents("php://input");
     }
-    private function getData() {
-        return json_decode($this->data);
-    }
+   
 
     function Mostrar_tabla_de_aviones() { 
+        $user = $this->authHelper->currentUser(); 
+        if($user){ 
         try {
             $Aeronave = $this->model->datos_de_tabla_de_Aeronave();
             if ($Aeronave) {
@@ -38,8 +36,10 @@ class Controlador_Aeronave
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
         }
     }
-
+    }
     function Listar_por_precio($params=null){
+        $user = $this->authHelper->currentUser(); 
+        if($user){ 
        // Validar que el parámetro está presente
     if (!isset($params[':Posicióndelatabla'])) {
         return $this->view->response("Parámetro no proporcionado", 500);
@@ -77,7 +77,7 @@ class Controlador_Aeronave
         return $this->view->response("Error de servidor: " . $e->getMessage(),500);
     }
 }
-    
+}
 
 
 
@@ -88,6 +88,9 @@ class Controlador_Aeronave
 
 
     public function Filtrar_por_el_precio_mayor_elegido($params = null) {
+        $user = $this->authHelper->currentUser(); 
+        if($user){ 
+
         $precio = $params[':precio'];
         
         if (is_null($precio) || $precio === '') {
@@ -109,11 +112,13 @@ class Controlador_Aeronave
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
         }
     }
-
+    }
 
 
     function eliminarAeronave($params=null)
     { $id = $params[':ID'];
+        $user = $this->authHelper->currentUser(); 
+        if($user){ 
         try {
 
         $Aeronave = $this->model->datos_de_tabla_de_Aeronave($id);
@@ -133,8 +138,10 @@ class Controlador_Aeronave
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
         }
     }
+    }
     function insert_Aeronave()
-    {
+    { $user = $this->authHelper->currentUser(); 
+        if($user){ 
         // Obtener datos de entrada
         $tareaAeronave = $this->getData();
     
@@ -159,4 +166,5 @@ class Controlador_Aeronave
         // Éxito
         return $this->view->response("Se insertó correctamente con id: $lastId", 200);
     }
+}
 }
