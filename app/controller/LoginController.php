@@ -2,7 +2,7 @@
 require_once 'app/controller/Controller.php';
 require_once 'app/model/AuthModel.php';
 
-class AuthApiController extends Controller{
+class loginController extends Controller{
 
     private $model;  
 

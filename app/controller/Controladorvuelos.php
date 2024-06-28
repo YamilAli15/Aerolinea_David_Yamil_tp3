@@ -113,9 +113,7 @@ class Controlador_vuelos extends Controller
                 // Responder con error si alguna de las consultas falló
                 return $this->view->response("Hubo un error en una de las dos bases de datos", 404);
             }
-        } catch (PDOException $e) {
-            // Manejo de excepciones específicas de la base de datos
-            return $this->view->response("Error en la base de datos: " . $e->getMessage(), 500);
+       
         } catch (Exception $e) {
             // Manejo de excepciones generales
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);

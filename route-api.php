@@ -6,27 +6,23 @@
     $router = new Router();
 
     // GET http://localhost/api/aerolineas
-    $router->addRoute('TablaDeAviones', 'GET', 'Controlador_Aeronave', 'Mostrar_tabla_de_aviones');//ok
+    $router->addRoute('TablaDeAviones', 'GET', 'Controlador_Aeronave', 'Mostrar_tabla_de_aviones');
 
-    $router->addRoute('TablaDeVuelo/:ID', 'GET', 'Controlador_vuelos', 'Mostrar_tabla_de_vuelos');
+    $router->addRoute('ListarPorPrecio', 'GET', 'Controlador_Aeronave', 'Listar_por_precio');
 
-    $router->addRoute('EditarVuelo/:ID', 'PUT', 'Controlador_vuelos', 'Editar_tabla_de_vuelos');
+    $router->addRoute('FiltrarPorPrecioMayorElegido', 'GET', 'Controlador_Aeronave', 'Filtrar_por_el_precio_mayor_elegido');
 
+    $router->addRoute('EliminarAeronave', 'DELETE', 'Controlador_Aeronave', 'eliminarAeronave');
 
-    $router->addRoute('TablaDeAvionesPorPrecio/:precio', 'GET', 'Controlador_Aeronave', 'Filtrar_por_el_precio_mayor_elegido');
+    $router->addRoute('InsertarAeronave', 'POST', 'Controlador_Aeronave', 'insert_Aeronave');
 
+    $router->addRoute('TablaDeVuelo/:ID', 'GET', 'Controlador_vuelos', 'mostrarTablaDeVuelos');
 
-    $router->addRoute('TablaDeAviones', 'POST', 'Controlador_Aeronave', 'insert_Aeronave');
+    $router->addRoute('vuelos', 'POST', 'Controlador_vuelos', 'insert_vuelo');
 
-     
-     $router->addRoute('TablaDeVuelo', 'POST', 'Controlador_vuelos', 'insert_vuelo');
-  
-     $router->addRoute('TablaDeAviones/:ID', 'DELETE', 'Controlador_Aeronave', 'eliminarAeronave');
+    $router->addRoute('TablaDeVuelo/:ID', 'PUT', 'Controlador_vuelos', 'Editar_tabla_de_vuelos');
 
-     $router->addRoute('TablaDeVuelo/:ID', 'DELETE', 'Controlador_vuelos', 'eliminarVuelos');
+    $router->addRoute('login', 'POST', 'loginController', 'login');
 
-     $router->addRoute('TablaDeAvionesPorPrecio/:Posicióndelatabla', 'GET', 'Controlador_Aeronave', 'Listar_por_precio');//ok
-      
-    // $router->addRoute('tareas/:ID', 'PUT', 'TaskApiController', 'finalizaTarea');
 
     $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
