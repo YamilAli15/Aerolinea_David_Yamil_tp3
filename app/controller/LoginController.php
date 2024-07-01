@@ -42,7 +42,7 @@ class loginController extends Controller{
         $user = $this->model->usuarios($email);
         
         if($user && password_verify($pass, $user->password)){
-            $userdata = [ "email" => $user->email, "role" => $user->rol];
+            $userdata = [ "email" => $user->name, "role" => $user->Range];
             $token = $this->authHelper->createToken($userdata);
             
             $response = [

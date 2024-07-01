@@ -22,8 +22,8 @@ class Controlador_vuelos extends Controller
 
     function mostrarTablaDeVuelos($params = null)
     {
-        $user = $this->authHelper->currentUser(); 
-        if($user){ // Validar y obtener el ID
+        // $user = $this->authHelper->currentUser(); 
+        // if($user){ // Validar y obtener el ID
         if (!isset($params[':ID'])) {
             return $this->view->response("Parámetros inválidos", 400);
         }
@@ -53,11 +53,11 @@ class Controlador_vuelos extends Controller
             return $this->view->response("Error de servidor", 500);
         }
     }
-}
+// }
     function insert_vuelo()
     {
-        $user = $this->authHelper->currentUser(); 
-        if($user){
+        // $user = $this->authHelper->currentUser(); 
+        // if($user){
         // Obtener datos de la solicitud
         $tareaAeronave = $this->getData();
     
@@ -82,10 +82,10 @@ class Controlador_vuelos extends Controller
         }
     }
 
-} 
+// } 
     function Editar_tabla_de_vuelos($params = null) {
-        $user = $this->authHelper->currentUser(); 
-        if($user){
+        // $user = $this->authHelper->currentUser(); 
+        // if($user){
         // Validar que el parámetro ID esté presente
         if (!isset($params[':ID'])) {
             return $this->view->response("Faltan parámetros requeridos", 400);
@@ -121,4 +121,4 @@ class Controlador_vuelos extends Controller
     }
 } 
 
-}
+// }

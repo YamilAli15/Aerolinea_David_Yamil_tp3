@@ -8,11 +8,11 @@
     // GET http://localhost/api/aerolineas
     $router->addRoute('TablaDeAviones', 'GET', 'Controlador_Aeronave', 'Mostrar_tabla_de_aviones');
 
-    $router->addRoute('ListarPorPrecio', 'GET', 'Controlador_Aeronave', 'Listar_por_precio');
+    $router->addRoute('ListarPorPrecio/:ID', 'GET', 'Controlador_Aeronave', 'Listar_por_precio');
 
-    $router->addRoute('FiltrarPorPrecioMayorElegido', 'GET', 'Controlador_Aeronave', 'Filtrar_por_el_precio_mayor_elegido');
+    $router->addRoute('FiltrarPorPrecioMayorElegido/:precio', 'GET', 'Controlador_Aeronave', 'Filtrar_por_el_precio_mayor_elegido');
 
-    $router->addRoute('EliminarAeronave', 'DELETE', 'Controlador_Aeronave', 'eliminarAeronave');
+    $router->addRoute('EliminarAeronave:ID', 'DELETE', 'Controlador_Aeronave', 'eliminarAeronave');
 
     $router->addRoute('InsertarAeronave', 'POST', 'Controlador_Aeronave', 'insert_Aeronave');
 
@@ -23,6 +23,5 @@
     $router->addRoute('TablaDeVuelo/:ID', 'PUT', 'Controlador_vuelos', 'Editar_tabla_de_vuelos');
 
     $router->addRoute('login', 'POST', 'loginController', 'login');
-
 
     $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
