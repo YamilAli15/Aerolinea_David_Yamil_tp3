@@ -79,14 +79,6 @@ class Controlador_Aeronave extends Controller
 }
 // }
 
-
-
-
-
-
-
-
-
     public function Filtrar_por_el_precio_mayor_elegido($params = null) {
         // $user = $this->authHelper->currentUser(); 
         // if($user){ 
@@ -115,36 +107,37 @@ class Controlador_Aeronave extends Controller
     // }
 
 
-    function eliminarAeronave($params=null)
-    { $id = $params[':ID'];
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){ 
+    function eliminarAeronave($params=null) {
         try {
-
-        $Aeronave = $this->model->datos_de_tabla_de_Aeronave($id);
-            if($Aeronave){
-                $Aeronave=$this->model->eliminarAeronave($id);
-            //    $this->view->response($response, 200);
-           return $this->view->response("Aeronave $id, eliminada", 200);
-              
-            } else{
-                return  $this->view->response("Aeronave $id, no encontrada", 404);
+            if (!isset($params[':ID'])) {
+                return $this->view->response("ID de aeronave no proporcionado:", 500);
             }
-              
             
+            $id = $params[':ID'];
+            $Aeronave = $this->model->datos_de_un_Aeronave($id);
     
-       
-        }    catch (Exception $e) {
+            if ($Aeronave) {
+                $this->model->eliminarAeronave($id);
+                $this->view->response(['msg' => 'El Aeronave con id: ' . $id . ' ha sido borrado con éxito'], 200);
+            } else {
+                $this->view->response(['msg' => 'El Aeronave con id: ' . $id . ' NO existe'], 404);
+            }
+        } catch (Exception $e) {
+            // Captura y maneja excepciones
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
         }
     }
-    // }
+    
+
+
     function insert_Aeronave()
-    { $user = $this->authHelper->currentUser(); 
-        if($user){ 
+    { 
+        // $user = $this->authHelper->currentUser(); 
+    //     if($user){ 
         // Obtener datos de entrada
         $tareaAeronave = $this->getData();
-    
+    //   var_dump($tareaAeronave);die;
+
         // Validar datos de entrada
         if (!isset($tareaAeronave->Aeronave) || !isset($tareaAeronave->Precio) || !isset($tareaAeronave->Fecha)) {
             return $this->view->response("Faltan datos requeridos.", 400);
@@ -167,4 +160,4 @@ class Controlador_Aeronave extends Controller
         return $this->view->response("Se insertó correctamente con id: $lastId", 200);
     }
 }
-}
+

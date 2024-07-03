@@ -6,17 +6,15 @@ require_once "app/model/Aeronavemodel.php";
 class Controlador_vuelos extends Controller
 {
 
-    private $modelvuelos;
-    private $modelAeronave; 
+    private $model;
+    
  
 
 
     public function __construct()
     {
         parent::__construct();
-        $this->modelvuelos = new Administrador_tabla_de_vuelos();
-        $this->modelAeronave = new Administrador_tabla_de_aviones();
-
+        $this->model = new Administrador_tabla_de_vuelos();
     }
    
 
@@ -32,7 +30,7 @@ class Controlador_vuelos extends Controller
     
         try {
             // Obtener los datos de vuelos desde el modelo
-            $vuelos = $this->modelvuelos->datosDeTablaDeVuelos($id);
+            $vuelos = $this->model->datos_de_tabla_de_vuelos($id);
     
             if ($vuelos) {
                 // Preparar la respuesta con datos de vuelos
@@ -55,27 +53,37 @@ class Controlador_vuelos extends Controller
     }
 // }
     function insert_vuelo()
-    {
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){
-        // Obtener datos de la solicitud
-        $tareaAeronave = $this->getData();
+    {  
+    // $user = $this->authHelper->currentUser(); 
+    // if($user){
+    // Obtener datos de la solicitud
+    $tareaAeronave = $this->getData();
     
         // Validar datos
+    
+        
         if (empty($tareaAeronave->Destino) || empty($tareaAeronave->Precio) || empty($tareaAeronave->id_aerolinea)) {
             return $this->view->response("Datos incompletos", 400);
         }
     
         try {
             // Insertar vuelo en la base de datos
-            $lastId = $this->modelvuelos->insert_vuelo(
-                $tareaAeronave->Destino,
-                $tareaAeronave->Precio,
-                $tareaAeronave->id_aerolinea
-            );
-    
-            // Responder con éxito y el ID del nuevo vuelo
-            return $this->view->response("Se insertó correctamente con id: $lastId", 200);
+            $Destino = htmlspecialchars($tareaAeronave->Aeronave);
+            $Pilotos = htmlspecialchars($tareaAeronave->Precio);
+            $id_aerolinea = htmlspecialchars($tareaAeronave->Fecha);
+        
+            // Insertar datos en la base de datos
+            $lastId = $this->model->insert_vuelo($Destino, $Pilotos, $id_aerolinea);
+
+            if ($lastId === false) {
+                return $this->view->response("Error al insertar los datos.", 500);
+            }else
+            {
+             // Responder con éxito y el ID del nuevo vuelo
+             return $this->view->response("Se insertó correctamente con id: $lastId", 200);
+            }
+            
+            
         } catch (Exception $e) {
             // Manejo de errores
             return $this->view->response("Error al insertar el vuelo: " . $e->getMessage(), 500);
@@ -83,42 +91,57 @@ class Controlador_vuelos extends Controller
     }
 
 // } 
-    function Editar_tabla_de_vuelos($params = null) {
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){
-        // Validar que el parámetro ID esté presente
-        if (!isset($params[':ID'])) {
-            return $this->view->response("Faltan parámetros requeridos", 400);
-        }
-    
-        $id = $params[':ID'];
-    
-        try {
-            // Obtener los datos de la tabla de vuelos y la tabla de aeronaves
-            $vuelos = $this->modelvuelos->tabla_de_vuelos($id);
-            $aeronave = $this->modelAeronave->datos_de_tabla_de_Aeronave();
-    
-            // Verificar que ambos resultados sean válidos
-            if ($aeronave && $vuelos) {
-                // Formar la respuesta exitosa con los datos obtenidos
-                $response = [
-                    "status" => 200,
-                    "data" => [
-                        "aeronave" => $aeronave,
-                        "vuelos" => $vuelos
-                    ]
-                ];
-                return $this->view->response($response, 200);
-            } else {
-                // Responder con error si alguna de las consultas falló
-                return $this->view->response("Hubo un error en una de las dos bases de datos", 404);
-            }
-       
-        } catch (Exception $e) {
-            // Manejo de excepciones generales
-            return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
+
+function insert_Aeronave()
+{ 
+    // $user = $this->authHelper->currentUser(); 
+//     if($user){ 
+    // Obtener datos de entrada
+    $tareaAeronave = $this->getData();
+//   var_dump($tareaAeronave);die;
+
+    // Validar datos de entrada
+    if (!isset($tareaAeronave->Destino) || !isset($tareaAeronave->Pilotos) || !isset($tareaAeronave->id_aerolinea)) {
+        return $this->view->response("Faltan datos requeridos.", 400);
+    }
+
+    // Sanitizar y escapar los datos de entrada (por seguridad)
+    $Destino = htmlspecialchars($tareaAeronave->Destino);
+    $Pilotos = htmlspecialchars($tareaAeronave->Precio);
+    $id_aerolinea = htmlspecialchars($tareaAeronave->id_aerolinea);
+
+    // Insertar datos en la base de datos
+    $lastId = $this->model->insert_vuelo($Destino,$Pilotos,$id_aerolinea);
+
+    // Manejo de errores
+    if ($lastId === false) {
+        return $this->view->response("Error al insertar los datos.", 500);
+    }
+
+    // Éxito
+    return $this->view->response("Se insertó correctamente con id: $lastId", 200);
+}
+
+
+function actualizarVuelo($params = []){
+    $id = $params[':ID'];
+    $Game = $this->model->datos_de_un_vuelos($id);
+    if($Game){
+        $Vuelos = $this->getdata();
+        if(isset($Vuelos->Destino) && isset($Vuelos->Pilotos) && isset($Vuelos->id_aerolinea)) {
+            
+            $Destino = $Vuelos->Destino;
+            $Pilotos = $Vuelos->Pilotos;
+            $id_aerolinea = $Vuelos->id_aerolinea;
+
+            $this->model->Actualizar_vuelo($Destino,$Pilotos,$id_aerolinea,$id);
+            $this->view->response(['msg:' => 'El juego con el id: ' . $id . ' fue modificado'], 200);
+        } else {
+            $this->view->response(['msg:' => 'Faltan datos obligatorios para modificar o los datos ingresados no coinciden con los datos de la tabla'], 400);   
         }
     }
-} 
-
-// }
+    else{
+        $this->view->response(['msg:' => 'El juego con el id: ' . $id . ' no existe'], 404);
+    }
+}
+}
