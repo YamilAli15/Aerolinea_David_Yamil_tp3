@@ -15,11 +15,11 @@ class Administrador_tabla_de_aviones extends Model
         $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
-    public function Filtrarporelpreciomayorelegido($precio) {
+    function Filtrarporelpreciomayorelegido($Precio) {
 
         $db = $this->createConexion();
-        $sentencia = $db->prepare("SELECT * FROM aerolineas_argentinas WHERE precio > ?");
-        $sentencia->execute([$precio]);
+        $sentencia = $db->prepare("SELECT * FROM aerolineas_argentinas WHERE Precio > ?");
+        $sentencia->execute([$Precio]);
         $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
@@ -78,4 +78,13 @@ class Administrador_tabla_de_aviones extends Model
         $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $vuelos;
     }
+
+    function Actualizar_Aeronave($Destino, $Pilotos, $id_aerolinea, $ID_Vuelos) {
+        $db = $this->createConexion();
+        
+        $resultado = $db->prepare("UPDATE vuelos SET Destino=?, Pilotos=?, id_aerolinea=? WHERE ID_Vuelos = ?");
+        $resultado->execute([$Destino, $Pilotos, $id_aerolinea, $ID_Vuelos]);
+    }
+  
 }
+

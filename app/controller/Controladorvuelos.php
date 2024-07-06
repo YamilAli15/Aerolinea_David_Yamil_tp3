@@ -17,20 +17,36 @@ class Controlador_vuelos extends Controller
         $this->model = new Administrador_tabla_de_vuelos();
     }
    
+    function Mostrar_tabla_de_vuelos() { 
+        try {
+            $vuelos = $this->model->datos_de_tabla_de_vuelos();
+            if ($vuelos) {
+                $response = [
+                    "status" => 200,
+                    "data" => $vuelos
+                ];
+                return $this->view->response($response, 200);
+            } else {
+                return $this->view->response("No hay tareas en la base de datos", 404);
+            }
+        } catch (Exception $e) {
+            return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
+        }
+    }
 
-    function mostrarTablaDeVuelos($params = null)
+    function mostrarTablaDeVuelosID($params = null)
     {
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){ // Validar y obtener el ID
+         // Validar y obtener el ID
         if (!isset($params[':ID'])) {
             return $this->view->response("Parámetros inválidos", 400);
         }
     
         $id = $params[':ID'];
-    
+        
         try {
             // Obtener los datos de vuelos desde el modelo
-            $vuelos = $this->model->datos_de_tabla_de_vuelos($id);
+            
+            $vuelos = $this->model->datos_de_tabla_de_vuelos_id($id);
     
             if ($vuelos) {
                 // Preparar la respuesta con datos de vuelos
@@ -54,8 +70,7 @@ class Controlador_vuelos extends Controller
 // }
     function insert_vuelo()
     {  
-    // $user = $this->authHelper->currentUser(); 
-    // if($user){
+
     // Obtener datos de la solicitud
     $tareaAeronave = $this->getData();
     
@@ -92,41 +107,10 @@ class Controlador_vuelos extends Controller
 
 // } 
 
-function insert_Aeronave()
-{ 
-    // $user = $this->authHelper->currentUser(); 
-//     if($user){ 
-    // Obtener datos de entrada
-    $tareaAeronave = $this->getData();
-//   var_dump($tareaAeronave);die;
-
-    // Validar datos de entrada
-    if (!isset($tareaAeronave->Destino) || !isset($tareaAeronave->Pilotos) || !isset($tareaAeronave->id_aerolinea)) {
-        return $this->view->response("Faltan datos requeridos.", 400);
-    }
-
-    // Sanitizar y escapar los datos de entrada (por seguridad)
-    $Destino = htmlspecialchars($tareaAeronave->Destino);
-    $Pilotos = htmlspecialchars($tareaAeronave->Precio);
-    $id_aerolinea = htmlspecialchars($tareaAeronave->id_aerolinea);
-
-    // Insertar datos en la base de datos
-    $lastId = $this->model->insert_vuelo($Destino,$Pilotos,$id_aerolinea);
-
-    // Manejo de errores
-    if ($lastId === false) {
-        return $this->view->response("Error al insertar los datos.", 500);
-    }
-
-    // Éxito
-    return $this->view->response("Se insertó correctamente con id: $lastId", 200);
-}
-
-
 function actualizarVuelo($params = []){
     $id = $params[':ID'];
-    $Game = $this->model->datos_de_un_vuelos($id);
-    if($Game){
+    $vuelos = $this->model->datos_de_un_vuelos($id);
+    if($vuelos){
         $Vuelos = $this->getdata();
         if(isset($Vuelos->Destino) && isset($Vuelos->Pilotos) && isset($Vuelos->id_aerolinea)) {
             
@@ -135,13 +119,36 @@ function actualizarVuelo($params = []){
             $id_aerolinea = $Vuelos->id_aerolinea;
 
             $this->model->Actualizar_vuelo($Destino,$Pilotos,$id_aerolinea,$id);
-            $this->view->response(['msg:' => 'El juego con el id: ' . $id . ' fue modificado'], 200);
+            $this->view->response(['msg:' => 'El Vuelos con el id: ' . $id . ' fue modificado'], 200);
         } else {
             $this->view->response(['msg:' => 'Faltan datos obligatorios para modificar o los datos ingresados no coinciden con los datos de la tabla'], 400);   
         }
     }
     else{
-        $this->view->response(['msg:' => 'El juego con el id: ' . $id . ' no existe'], 404);
+        $this->view->response(['msg:' => 'El Vuelos con el id: ' . $id . ' no existe'], 404);
     }
 }
+
+
+function eliminarvuelo($params=null) {
+    try {
+        if (!isset($params[':ID'])) {
+            return $this->view->response("ID de aeronave no proporcionado:", 500);
+        }
+        
+        $id = $params[':ID'];
+        $Aeronave = $this->model->datos_de_un_vuelos($id);
+
+        if ($Aeronave) {
+            $this->model->eliminar_vuelo($id);
+            $this->view->response(['msg' => 'El vuelo con id: ' . $id . ' ha sido borrado con éxito'], 200);
+        } else {
+            $this->view->response(['msg' => 'El vuelo con id: ' . $id . ' NO existe'], 404);
+        }
+    } catch (Exception $e) {
+        // Captura y maneja excepciones
+        return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
+    }
+}
+
 }

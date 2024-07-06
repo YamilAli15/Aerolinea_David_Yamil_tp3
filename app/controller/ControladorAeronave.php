@@ -19,8 +19,6 @@ class Controlador_Aeronave extends Controller
    
 
     function Mostrar_tabla_de_aviones() { 
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){ 
         try {
             $Aeronave = $this->model->datos_de_tabla_de_Aeronave();
             if ($Aeronave) {
@@ -36,10 +34,8 @@ class Controlador_Aeronave extends Controller
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
         }
     }
-    // }
-    function Listar_por_precio($params=null){
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){ 
+
+function Listar_por_precio($params=null){
        // Validar que el parámetro está presente
     if (!isset($params[':ID'])) {
         return $this->view->response("Parámetro no proporcionado", 500);
@@ -79,9 +75,8 @@ class Controlador_Aeronave extends Controller
 }
 // }
 
-    public function Filtrar_por_el_precio_mayor_elegido($params = null) {
-        // $user = $this->authHelper->currentUser(); 
-        // if($user){ 
+ function Filtrar_por_el_precio_mayor_elegido($params = null) {
+       
 
         $precio = $params[':precio'];
         
@@ -104,7 +99,8 @@ class Controlador_Aeronave extends Controller
             return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
         }
     }
-    // }
+
+    
 
 
     function eliminarAeronave($params=null) {
@@ -132,8 +128,6 @@ class Controlador_Aeronave extends Controller
 
     function insert_Aeronave()
     { 
-        // $user = $this->authHelper->currentUser(); 
-    //     if($user){ 
         // Obtener datos de entrada
         $tareaAeronave = $this->getData();
     //   var_dump($tareaAeronave);die;
@@ -159,5 +153,33 @@ class Controlador_Aeronave extends Controller
         // Éxito
         return $this->view->response("Se insertó correctamente con id: $lastId", 200);
     }
+
+    function actualizarAeronave($params = []){
+        $id = $params[':ID'];
+        $Aeronave = $this->model->datos_de_un_Aeronave($id);
+        if($Aeronave){
+            $Vuelos = $this->getdata();
+            if(isset($Vuelos->Destino) && isset($Vuelos->Pilotos) && isset($Vuelos->id_aerolinea)) {
+                
+                $Destino = $Vuelos->Destino;
+                $Pilotos = $Vuelos->Pilotos;
+                $id_aerolinea = $Vuelos->id_aerolinea;
+    
+                $this->model->Actualizar_Aeronave($Destino,$Pilotos,$id_aerolinea,$id);
+                $this->view->response(['msg:' => 'la Aeronave con el id: ' . $id . ' fue modificado'], 200);
+            } else {
+                $this->view->response(['msg:' => 'Faltan datos obligatorios para modificar o los datos ingresados no coinciden con los datos de la tabla'], 400);   
+            }
+        }
+        else{
+            $this->view->response(['msg:' => 'la Aeronave con el id: ' . $id . ' no existe'], 404);
+        }
+    }
+    
+    
+    
 }
+
+
+
 

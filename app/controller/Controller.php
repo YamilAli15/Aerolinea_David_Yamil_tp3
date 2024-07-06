@@ -1,7 +1,7 @@
 <?php
 
 require_once 'app/view/JSONView.php';
-require_once 'app/helpers/AuthHelpers.php';
+
 
 class Controller {
 
@@ -10,7 +10,7 @@ class Controller {
     private $data;
 
     public function __construct() {
-        $this->authHelper = new AuthHelper();     
+
         $this->view = new JSONView();
         $this->data = file_get_contents("php://input");
     }

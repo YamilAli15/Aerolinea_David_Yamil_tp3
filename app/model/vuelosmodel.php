@@ -3,8 +3,19 @@ require_once "app/model/Model.php";
 
 class Administrador_tabla_de_vuelos extends Model
 { //extension del model 
+    
+    function datos_de_tabla_de_vuelos()
+    { // tabla general de todos los vuelos 
 
-    function datos_de_tabla_de_vuelos($id)
+        $db = $this->createConexion();
+
+
+        $sentencia = $db->prepare("SELECT * FROM vuelos");
+        $sentencia->execute();
+        $vuelos = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $vuelos;
+    }
+    function datos_de_tabla_de_vuelos_id($id)
     { // tabla general de todos los vuelos 
 
         $db = $this->createConexion();
