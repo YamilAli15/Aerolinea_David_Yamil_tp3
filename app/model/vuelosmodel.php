@@ -37,14 +37,24 @@ class Administrador_tabla_de_vuelos extends Model
         $vuelos = $sentencia->fetch(PDO::FETCH_OBJ);
         return $vuelos;
     }
-    function insert_vuelo($Destino,$Pilotos,$id_aerolinea)
+    function insert_vuelo($Destino, $Pilotos, $id_aerolinea)
     {
-        //abrimos la conexion;
-        $db = $this->createConexion();
-
-        //Enviar la consulta
-        $resultado = $db->prepare("INSERT INTO vuelos ($Destino,$Pilotos,$id_aerolinea ) VALUES (?,?,?)");
-        $resultado->execute([$Destino, $Pilotos, $id_aerolinea]); // ejecuta
+        try {
+            // Abrir la conexión (asumo que createConexion() devuelve un objeto PDO)
+            $db = $this->createConexion();
+    
+            // Preparar la consulta SQL con marcadores de posición
+            $resultado = $db->prepare("INSERT INTO vuelos (Destino, Pilotos, id_aerolinea) VALUES (?, ?, ?)");
+    
+            // Ejecutar la consulta con los valores proporcionados
+            $resultado->execute([$Destino, $Pilotos, $id_aerolinea]);
+    
+            // Retornar el último ID insertado si es necesario
+            return $db->lastInsertId();
+        } catch (PDOException $e) {
+            // Manejar cualquier error de la base de datos
+            throw new Exception("Error al insertar el vuelo: " . $e->getMessage());
+        }
     }
 
     function eliminar_vuelo($id)
@@ -67,10 +77,11 @@ class Administrador_tabla_de_vuelos extends Model
         return $vuelos;
     }
 
-    function Actualizar_vuelo($Destino, $Pilotos, $id_aerolinea, $ID_Vuelos) {
-        $db = $this->createConexion();
-        
-        $resultado = $db->prepare("UPDATE vuelos SET Destino=?, Pilotos=?, id_aerolinea=? WHERE ID_Vuelos = ?");
-        $resultado->execute([$Destino, $Pilotos, $id_aerolinea, $ID_Vuelos]);
+    function Actualizar_vuelo($Destino, $Pilotos, $id_aerolinea, $ID_Vuelos ) 
+    {
+            $db = $this->createConexion();
+            
+            $resultado = $db->prepare("UPDATE vuelos SET Destino=?, Pilotos=?, id_aerolinea=? WHERE ID_Vuelos  = ?");
+            $resultado->execute([$Destino, $Pilotos, $id_aerolinea, $ID_Vuelos ]);
     }
 }

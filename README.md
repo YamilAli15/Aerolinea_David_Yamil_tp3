@@ -15,9 +15,11 @@ Este proyecto consiste en una página web para la gestión de aeronaves y vuelos
     - [Función `actualizarAeronave()`](#función-actualizaraeronave)
     
 2. [Controlador de Vuelos](#controlador-de-vuelos)
-    - [Función `mostrarTablaDeVuelos()`](#función-mostrartabladevuelos)
+    - [Función `Mostrartabladevuelos()`](#función-Mostrartabladevuelos)
+    - [Función `mostrarTablaDeVuelosID()`](#función-mostrarTablaDeVuelosID)
     - [Función `insertarVuelo()`](#función-insertarvuelo)
     - [Función `actualizarVuelo()`](#función-actualizarvuelo)
+    - [Función `eliminarvuelo()`](#función-eliminarvuelo)
 
 ## Controlador de Aeronaves
 
@@ -502,15 +504,278 @@ Mi Instagram: aliiyamil05
 
 ## Controlador de Vuelos
 
-### Función `mostrarTablaDeVuelos()`
+### Función `Mostrartabladevuelos()`
 
-Muestra una tabla con todos los vuelos disponibles.
+1. Configura la solicitud:
+
+- Método HTTP: GET
+- URL: localhost/"A dónde guardaste tu archivo"/api/vuelos
+
+2. Enviar la solicitud:
+
+Haz clic en Send.
+
+3. Ejemplo de Respuesta:
+
+- 200 OK:
+
+Esto indica que los datos de los vuelos fueron recuperados con éxito.
+
+~~~json
+"status": 200,
+    "data": 
+    [
+        {
+            "ID_Vuelos": 1,
+            "Destino": "Francia",
+            "Pilotos": "Juan y Pepito",
+            "id_aerolinea": 2
+        },
+    ]
+~~~
+
+- 404 Not Found:
+
+Esto indica que no hay datos en la tabla de vuelos.
+
+~~~json
+{
+  "status": 404,
+  "message": "No hay tareas en la base de datos"
+}
+~~~
+
+- 500 Internal Server Error:
+
+Esto indica que ocurrió un error en el servidor.
+
+~~~json
+{
+  "status": 500,
+  "message": "Error de servidor: [mensaje de error]"
+}
+~~~
+
+Con estos pasos, deberías poder invocar la función Mostrar_tabla_de_vuelos desde Postman y ver la respuesta correspondiente.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
+
+### Función `mostrarTablaDeVuelosID()`
+
+1. URL de la API:
+Asume que tu API está alojada en localhost/"A dónde guardaste tu archivo"/api/Vuelos/ID
+
+2. Método HTTP:
+Selecciona el método HTTP adecuado. Generalmente, será GET si solo estás obteniendo datos.
+
+3. Parámetros:
+En la sección de "Params" de Postman, agrega un parámetro de ruta llamado id con el valor que quieres consultar. Alternativamente, puedes usar el formato de la URL: localhost/"A dónde guardaste tu archivo"/123 donde 123 es el ID del vuelo.
+
+4. Enviar la Petición:
+Haz clic en el botón "Send" y revisa la respuesta de la API en la sección de "Response" de Postman.
+
+5. Ejemplo de Respuesta:
+
+- Respuesta exitosa
+
+~~~json
+{
+    "status": 200,
+    "data": [
+        {
+            "ID_Vuelos": 1,
+            "Destino": "Francia",
+            "Pilotos": "Juan y Pepito",
+            "id_aerolinea": 2,
+            "ID": 2,
+            "Aeronave": "Nuevo Aeronave",
+            "Precio": 0,
+            "Fecha": "0000-00-00 00:00:00"
+        }
+    ]
+}
+~~~
+
+- O en caso de error:
+
+~~~json
+{
+    "status": 404,
+    "message": "No hay vuelos en la base de datos"
+}
+~~~
+
+Con estos pasos, podrás usar la función mostrarTablaDeVuelosID en Postman para probar y verificar el funcionamiento de tu API.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
 
 ### Función `insertarVuelo()`
 
-Inserta un nuevo vuelo en la base de datos.
+1. Método: Selecciona POST.
+
+2. URL: Ingresa la URL de tu endpoint, por ejemplo, localhost/"A dónde guardaste tu archivo"/api/Vuelos/ID La ID es el vuelo a elegir.
+
+3. Paso 2: Configura el cuerpo de la solicitud
+
+Ve a la pestaña Body.
+
+Selecciona la opción raw.
+
+Cambia el formato a JSON.
+
+Ingresa el siguiente JSON en el cuerpo de la solicitud, asegurándote de incluir los campos necesarios (**Destino**, **Precio**, **id_aerolinea**):
+
+- Ejemplo:
+
+~~~json
+{ 
+    "Destino": "argentina",
+    "Pilotos": "Yamil",
+    "id_aerolinea": "6"
+}
+~~~
+
+- Respuesta exitosa
+
+~~~json
+"Se insertó correctamente con id: 11"
+~~~
+
+- Error por falta de datos
+
+~~~json
+"Datos incompletos"
+~~~
+
+- Esto sucede cuando lo intentas conectar una ID que no existe:
+
+~~~json
+"Error al insertar el vuelo: Error al insertar el vuelo: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`db_aerolineas`.`vuelos`, CONSTRAINT `FK_VUELO_AEROLINEA` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas_argentinas` (`ID`))"
+~~~
+
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
 
 ### Función `actualizarVuelo()`
 
-Actualiza la información de un vuelo existente.
+1. Configuración de la Solicitud HTTP:
 
+Abre Postman y crea una nueva solicitud.
+Selecciona el tipo de solicitud HTTP adecuado  PUT
+
+2. URL de la solicitud:
+
+- Ingresa la URL de tu API o ruta PHP que maneja la actualización del vuelo. Por ejemplo, si tu API está en localhost/"A dónde guardaste tu archivo"/api/Vuelos, esa sería la URL base.
+
+- esta estar esperando datos como Destino, Pilotos, id_aerolinea, etc. Puedes configurar esto en el cuerpo de la solicitud en Postman, ya sea como JSON, form-data.
+
+3. Enviar la Solicitud:
+
+Después de configurar la URL y el cuerpo de la solicitud en Postman, puedes enviar la solicitud haciendo clic en el botón "Enviar".
+
+4. Verificar la Respuesta:
+
+- Modificado con éxito 200
+
+~~~json
+{
+    "msg:": "El Vuelos con el id: 1 fue modificado",
+}
+~~~
+
+- Faltan Campos 400
+
+~~~json
+{
+"msg:": "Faltan datos obligatorios para modificar o los datos ingresados no coinciden con los datos de la tabla"
+}
+~~~
+
+- ID de inexistente
+
+~~~json
+{
+    "msg:": "El Vuelos con el id: 100 no existe"
+}
+~~~
+
+Al enviar esta solicitud, deberías obtener una respuesta según cómo esté implementada la lógica en tu backend PHP, siguiendo los pasos de validación y actualización que has definido en la función actualizarVuelo.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
+
+### Función `eliminarvuelo()`
+
+1. Configuración de la Solicitud HTTP:
+
+- Abre Postman y crea una nueva solicitud.
+Selecciona el tipo de solicitud HTTP adecuado  DELETE
+
+- ngresa la URL del endpoint donde está ubicada tu función PHP que maneja la eliminación de vuelos.
+
+2. Configurar los parámetros:
+
+- Si tu función espera parámetros, como el ID del vuelo que se va a eliminar (:ID), asegúrate de incluirlos en la sección de parámetros de Postman.
+Puedes agregar parámetros directamente en la pestaña "Params" de Postman, especificando la clave :ID y su valor correspondiente.
+
+- Ingresa la URL de tu API o ruta PHP que maneja la actualización del vuelo. Por ejemplo, si tu API está en localhost/"A dónde guardaste tu archivo"/api/Vuelos/ID, esa sería la URL base.
+
+3. nviar la solicitud:
+
+Una vez configurados los parámetros necesarios, haz clic en el botón "Send" para enviar la solicitud a tu servidor PHP.
+
+4. Verificar la Respuesta:
+
+- Eliminación exitosa:
+
+~~~json
+{
+    "msg": "El vuelo con id: 10 ha sido borrado con éxito"
+}
+~~~
+
+- Error en la ID
+
+~~~json
+{
+    "msg": "El vuelo con id: 100 NO existe"
+}
+~~~
+
+Es importante que el endpoint al que apuntas en Postman coincida con la configuración de tu servidor PHP y que los parámetros enviados estén correctamente formateados según lo esperado por la función eliminarvuelo. Esto asegurará que puedas probar y verificar el comportamiento de tu función de eliminación de vuelos de manera efectiva.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05

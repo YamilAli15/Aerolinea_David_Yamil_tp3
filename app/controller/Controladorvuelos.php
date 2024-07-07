@@ -68,42 +68,36 @@ class Controlador_vuelos extends Controller
         }
     }
 // }
-    function insert_vuelo()
-    {  
-
+function insert_vuelo() {  
     // Obtener datos de la solicitud
     $tareaAeronave = $this->getData();
     
-        // Validar datos
-    
-        
-        if (empty($tareaAeronave->Destino) || empty($tareaAeronave->Precio) || empty($tareaAeronave->id_aerolinea)) {
-            return $this->view->response("Datos incompletos", 400);
-        }
-    
-        try {
-            // Insertar vuelo en la base de datos
-            $Destino = htmlspecialchars($tareaAeronave->Aeronave);
-            $Pilotos = htmlspecialchars($tareaAeronave->Precio);
-            $id_aerolinea = htmlspecialchars($tareaAeronave->Fecha);
-        
-            // Insertar datos en la base de datos
-            $lastId = $this->model->insert_vuelo($Destino, $Pilotos, $id_aerolinea);
-
-            if ($lastId === false) {
-                return $this->view->response("Error al insertar los datos.", 500);
-            }else
-            {
-             // Responder con éxito y el ID del nuevo vuelo
-             return $this->view->response("Se insertó correctamente con id: $lastId", 200);
-            }
-            
-            
-        } catch (Exception $e) {
-            // Manejo de errores
-            return $this->view->response("Error al insertar el vuelo: " . $e->getMessage(), 500);
-        }
+    // Validar datos
+    if (empty($tareaAeronave->Destino) || empty($tareaAeronave->Pilotos) || empty($tareaAeronave->id_aerolinea)) {
+        return $this->view->response("Datos incompletos", 400);
     }
+
+    try {
+        // Escapar datos para prevenir inyección de SQL
+        $Destino = htmlspecialchars($tareaAeronave->Destino);
+        $Pilotos = htmlspecialchars($tareaAeronave->Pilotos);
+        $id_aerolinea = htmlspecialchars($tareaAeronave->id_aerolinea);
+    
+        // Insertar datos en la base de datos
+        $lastId = $this->model->insert_vuelo($Destino, $Pilotos, $id_aerolinea);
+
+        if ($lastId === false) {
+            return $this->view->response("Error al insertar los datos.", 500);
+        } else {
+            // Responder con éxito y el ID del nuevo vuelo
+            return $this->view->response("Se insertó correctamente con id: $lastId", 200);
+        }
+        
+    } catch (Exception $e) {
+        // Manejo de errores
+        return $this->view->response("Error al insertar el vuelo: " . $e->getMessage(), 500);
+    }
+}
 
 // } 
 
