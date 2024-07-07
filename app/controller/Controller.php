@@ -5,7 +5,6 @@ require_once 'app/view/JSONView.php';
 
 class Controller {
 
-    protected $authHelper;
     protected $view;   
     private $data;
 

@@ -10,7 +10,7 @@
 
     $router->addRoute('Aviones/:ID', 'GET', 'Controlador_Aeronave', 'Listar_por_precio');
 
-    $router->addRoute('Aviones/:precio', 'GET', 'Controlador_Aeronave', 'Filtrar_por_el_precio_mayor_elegido');
+    $router->addRoute('Avione/:ID', 'GET', 'Controlador_Aeronave', 'Filtrar_por_el_precio_mayor_elegido');
 
     $router->addRoute('Aviones/:ID', 'DELETE', 'Controlador_Aeronave', 'eliminarAeronave');
 

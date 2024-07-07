@@ -263,33 +263,242 @@ Descripción: Cuando se encuentran aeronaves con el precio mayor o igual al espe
 
 ~~~json
 {
-  "status": 200,
-  "data": [
-    {
-      "id": 1,
-      "nombre": "Aeronave 1",
-      "precio": 150000
-    },
-    {
-      "id": 2,
-      "nombre": "Aeronave 2",
-      "precio": 200000
-    }
-  ]
+    "status": 200,
+    "data": [
+        {
+            "ID": 2,
+            "Aeronave": "Boeing 747",
+            "Precio": 2000000,
+            "Fecha": "2024-08-14 16:30:00"
+        },{
+            "ID": 14,
+            "Aeronave": "Nueva York",
+            "Precio": 3000000,
+            "Fecha": "2024-06-26 19:31:25"
+        }
+    ]
+}    
+~~~
+
+- Si no hay aeronaves:
+
+~~~json
+{
+    "status": 404,
+    "message": "No hay aeronaves en la base de datos"
 }
 ~~~
 
+- Si hay un error en el servidor:
+
+~~~json
+{
+    "status": 500,
+    "message": "Error de servidor: descripción del error"
+}
+~~~
+
+Con estos pasos, deberías poder utilizar tu función **Filtrar_por_el_precio_mayor_elegido** en **Postman** para probar y verificar su comportamiento.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
+
 ### Función `eliminarAeronave()`
 
-Elimina una aeronave específica de la base de datos.
+Para usar la función eliminarAeronave en Postman, deberás configurar una solicitud HTTP (generalmente DELETE) para que llame a esta función en tu API. Aquí te explico paso a paso cómo hacerlo:
+
+1. Método HTTP:
+La función eliminarAeronave se utiliza para eliminar una aeronave, por lo que el método HTTP que usarás será DELETE.
+
+2. URL de la solicitud:
+La URL debe apuntar al endpoint de tu API que maneja la eliminación de aeronaves. Por ejemplo:
+
+localhost/"A dónde guardaste tu archivo"/api/Aviones/ID
+
+Reemplaza {ID} con el ID de la aeronave que deseas eliminar.
+
+3. Parámetros de la solicitud:
+En este caso, el parámetro necesario es el ID de la aeronave, que se puede pasar directamente en la URL. No necesitas enviar parámetros en el cuerpo de la solicitud para un método DELETE.
+Recuerda que no tenga Ninguna vinculación a la otra Tabla Porque si no no se van a poder borrar Sin haber borrado antes lo de la tabla de vuelo.
+
+4. Enviar la solicitud:
+
+Haz clic en el botón "Send".
+
+5. Ejemplo de respuestas.
+
+- Caso exitoso:
+
+~~~json
+{
+    "msg": "El Aeronave con id: 13 ha sido borrado con éxito"
+}
+~~~
+
+- Si no hay aeronaves:
+
+~~~json
+{
+    "msg": "El Aeronave con id: 133 NO existe"
+}
+~~~
+
+- Si hay un error en el servidor o Se te haya olvidado borrar los vuelos vinculados:
+
+1. Error por la vinculación a la tabla de vuelos Por eso necesitas Borrar el vuelo vinculado primero
+
+~~~json
+"Error de servidor: SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`db_aerolineas`.`vuelos`, CONSTRAINT `FK_VUELO_AEROLINEA` FOREIGN KEY (`id_aerolinea`) REFERENCES `aerolineas_argentinas` (`ID`))"
+~~~
+
+2. Si hay un error en el servidor
+
+~~~json
+"Error de servidor: 500"
+~~~
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
 
 ### Función `insertarAeronave()`
 
-Inserta una nueva aeronave en la base de datos.
+1. Seleccionar método HTTP:
+
+Selecciona POST como método HTTP.
+
+2. Establecer URL:
+
+Introduce la URL de tu API que apunta al endpoint correspondiente. Por ejemplo:
+
+localhost/"A dónde guardaste tu archivo"/api/Aviones
+
+3. Configurar el cuerpo de la solicitud:
+
+Ve a la pestaña Body.
+Selecciona raw y luego JSON (application/json).
+Introduce los datos en formato JSON, por ejemplo
+
+~~~json
+{
+    "Aeronave": "Boeing 300",
+    "Precio": 80000000,
+    "Fecha": "2024-06-27"
+}
+~~~
+
+4. Enviar la solicitud:
+
+Haz clic en el botón Send para enviar la solicitud.
+
+5. Ver la respuesta:
+
+- En la sección de respuesta de Postman, deberías ver la respuesta de la API, que podría ser algo como:
+
+~~~json
+{
+  "message": "Se insertó correctamente",
+  "status": 200
+}
+~~~
+
+- O en caso de error
+
+~~~json
+{
+  "message": "Faltan datos requeridos.",
+  "status": 400
+}
+~~~
+
+~~~json
+{
+  "message": "Error al insertar los datos.",
+  "status": 500
+}
+~~~
+
+Con estos pasos, podrás probar la función insert_Aeronave en tu API usando Postman.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
 
 ### Función `actualizarAeronave()`
 
+1. Configurar la URL y el método HTTP
+Método HTTP: PUT
+
 Actualiza la información de una aeronave existente.
+
+2. URL: La URL dependerá de tu localhost/"A dónde guardaste tu archivo"/Aviones/ID, donde :ID será el identificador de la aeronave.
+
+3.  Configurar el Body
+Selecciona la opción raw y elige el tipo JSON. Luego, en el cuerpo de la solicitud, proporciona los datos necesarios como se espera en la función.
+
+~~~json
+{
+  "Aeronave": "Nuevo Aeronave",
+  "Precio": "Nuevo Piloto",
+  "Fecha": "2024-06-277/07/24",
+  "ID":2
+}
+~~~
+
+4. Enviar la solicitud
+
+Envía la solicitud y observa la respuesta. La función debe responder con uno de los siguientes mensajes:
+
+- Si la aeronave se actualiza correctamente:
+
+~~~json
+{
+    "msg:": "la Aeronave con el id: 2 fue modificado"
+}
+~~~
+
+- Si faltan datos obligatorios:
+
+~~~json
+{
+  "msg": "Faltan datos obligatorios para modificar o los datos ingresados no coinciden con los datos de la tabla"
+}
+~~~
+
+- Si la aeronave no existe:
+
+~~~json
+{
+  "msg": "la Aeronave con el id: [ID] no existe"
+}
+~~~
+
+Siguiendo estos pasos, podrás hacer la solicitud correcta a tu API para actualizar una aeronave usando Postman.
+
+Asegúrate de que tu servidor esté corriendo antes de enviar la petición desde Postman.
+Verifica que la ruta de la API y el método HTTP sean correctos.
+Si necesitas autenticación, asegúrate de incluir los encabezados necesarios en tu petición de Postman.
+Si tienes alguna duda adicional o necesitas más detalles, ¡no dudes en preguntar!
+
+mi email: aliiiyamil05@gmail.com
+
+Mi Instagram: aliiyamil05
 
 ## Controlador de Vuelos
 

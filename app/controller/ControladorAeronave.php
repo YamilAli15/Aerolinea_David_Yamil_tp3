@@ -75,30 +75,31 @@ function Listar_por_precio($params=null){
 }
 // }
 
- function Filtrar_por_el_precio_mayor_elegido($params = null) {
+
+function Filtrar_por_el_precio_mayor_elegido($params = null) {
        
 
-        $precio = $params[':precio'];
-        
-        if (is_null($precio) || $precio === '') {
-            return $this->view->response("El parámetro 'precio' es requerido", 400);
-        }
-
-        try {
-            $Aeronave = $this->model->Filtrarporelpreciomayorelegido($precio);
-            if ($Aeronave) {
-                $response = [
-                    "status" => 200,
-                    "data" => $Aeronave
-                ];
-                return $this->view->response($response, 200);
-            } else {
-                return $this->view->response("No hay aeronaves en la base de datos", 404);
-            }
-        } catch (Exception $e) {
-            return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
-        }
+    $precio = $params[':ID'];
+    
+    if (is_null($precio) || $precio === '') {
+        return $this->view->response("El parámetro 'precio' es requerido", 400);
     }
+
+    try {
+        $Aeronave = $this->model->Filtrarporelpreciomayorelegido($precio);
+        if ($Aeronave) {
+            $response = [
+                "status" => 200,
+                "data" => $Aeronave
+            ];
+            return $this->view->response($response, 200);
+        } else {
+            return $this->view->response("No hay aeronaves en la base de datos", 404);
+        }
+    } catch (Exception $e) {
+        return $this->view->response("Error de servidor: " . $e->getMessage(), 500);
+    }
+}
 
     
 
@@ -151,7 +152,7 @@ function Listar_por_precio($params=null){
         }
     
         // Éxito
-        return $this->view->response("Se insertó correctamente con id: $lastId", 200);
+        return $this->view->response("Se insertó correctamente: $lastId",200);
     }
 
     function actualizarAeronave($params = []){
@@ -159,13 +160,13 @@ function Listar_por_precio($params=null){
         $Aeronave = $this->model->datos_de_un_Aeronave($id);
         if($Aeronave){
             $Vuelos = $this->getdata();
-            if(isset($Vuelos->Destino) && isset($Vuelos->Pilotos) && isset($Vuelos->id_aerolinea)) {
+            if(isset($Vuelos->Aeronave	) && isset($Vuelos->Precio) && isset($Vuelos->Fecha)) {
                 
-                $Destino = $Vuelos->Destino;
-                $Pilotos = $Vuelos->Pilotos;
-                $id_aerolinea = $Vuelos->id_aerolinea;
+                $Aeronave= $Vuelos->Aeronave	;
+                $Precio = $Vuelos->Precio;
+                $Fecha = $Vuelos->Fecha;
     
-                $this->model->Actualizar_Aeronave($Destino,$Pilotos,$id_aerolinea,$id);
+                $this->model->Actualizar_Aeronave($Aeronave	,$Precio,$Fecha,$id);
                 $this->view->response(['msg:' => 'la Aeronave con el id: ' . $id . ' fue modificado'], 200);
             } else {
                 $this->view->response(['msg:' => 'Faltan datos obligatorios para modificar o los datos ingresados no coinciden con los datos de la tabla'], 400);   
